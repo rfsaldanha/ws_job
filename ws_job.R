@@ -10,7 +10,7 @@ cli_inform("{now()}")
 # Time stamp
 
 ## Initial time stamp, keep it commented!
-# last_end_time <- "24/09/2024 00:00:00"
+# last_end_time <- "17/09/2024 00:00:00"
 # saveRDS(object = last_end_time, file = "last_end_time.rds")
 
 ## Load end time from previous run as start time of this run
@@ -28,7 +28,7 @@ sensor_ids <- c(8, 35, 36, 37, 11, 18, 19, 22, 27, 28, 34, 23, 25, 26, 1)
 cli_alert("Attempting to login...")
 login()
 
-# Empty temp data tibble
+# Empty data tibble
 res <- tibble()
 
 # For each device...
