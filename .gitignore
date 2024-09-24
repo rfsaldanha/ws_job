@@ -47,3 +47,8 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# Ignore files
+*.rds
+*.duckdb
+*.wal
