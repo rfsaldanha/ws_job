@@ -1,6 +1,6 @@
 require(blastula)
 
-img_string <- add_image(file = "selo_obs_h.png", 250)
+img_string <- add_image(file = "ws_job/selo_obs_h.png", 250)
 
 send_email <- function(email, subject){
   smtp_send(
