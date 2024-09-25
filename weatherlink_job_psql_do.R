@@ -17,7 +17,15 @@ now_ts <- format(now(tzone = "Brazil/East"), "%d/%m/%Y %H:%M:%S")
 # Database connection
 con <- tryCatch(
   {
-    dbConnect(duckdb(), "weatherlink.duckdb")
+    # dbConnect(duckdb(), "weatherlink.duckdb")
+    dbConnect(
+      RPostgres::Postgres(),
+      dbname = "weatherlink", 
+      host = "dbaas-db-7323920-do-user-737434-0.l.db.ondigitalocean.com",
+      port = 25060, # or any other port specified by your DBA
+      user = Sys.getenv("weather_user"),
+      password = Sys.getenv("weather_password")
+    )
   }, 
   error=function(e) {
     cli_alert_warning("Could not connect to database.")
