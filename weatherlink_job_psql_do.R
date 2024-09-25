@@ -11,6 +11,8 @@ library(glue)
 library(here)
 source("ws_job/emails.R")
 
+# sudo apt install tzdata-legacy
+
 # Message and keep job start timestamp
 cli_alert_info("Job start: {now()}")
 now_ts <- format(now(tzone = "Brazil/East"), "%d/%m/%Y %H:%M:%S")

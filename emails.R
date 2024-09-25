@@ -8,7 +8,7 @@ send_email <- function(email, subject){
     to = "rfsaldanha@gmail.com",
     from = "raphael.saldanha@fiocruz.br",
     subject = subject,
-    credentials = creds_file("smtp2go_creds"),
+    credentials = creds_file("ws_job/smtp2go_creds"),
     verbose = FALSE
   )
 }
