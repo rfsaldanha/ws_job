@@ -38,22 +38,6 @@ con <- tryCatch(
 # Station ids
 station_ids <- c(195669)
 
-# Empty database creation. Keep it commented!!
-# for(d in station_ids){
-#   res <- current_data(d)
-#   for(s in 1:length(res)){
-#     table_name <- paste0("station_",d,"_sensor_",res[[s]]$lsid)
-
-#     empty_table <- res[[s]][0,]
-
-#     dbWriteTable(
-#       conn = con, 
-#       name = table_name, 
-#       value = empty_table
-#     )
-#   }
-# }
-
 # For each station...
 for(d in station_ids){
   # Retrieve data from station
