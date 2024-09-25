@@ -8,7 +8,8 @@ library(cli)
 library(rlang)
 library(blastula)
 library(glue)
-source("emails.R")
+library(here)
+source(here("emails.R"))
 
 # Message and keep job start timestamp
 cli_alert_info("Job start: {now()}")
