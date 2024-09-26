@@ -16,7 +16,7 @@ schema <- "estacoes"
 
 # Message and keep job start timestamp
 cli_alert_info("Job start: {now()}")
-now_ts <- format(now(tzone = "Brazil/East"), "%d/%m/%Y %H:%M:%S")
+now_ts <- format(now(), "%d/%m/%Y %H:%M:%S")
 
 # Database connection
 con <- tryCatch(
