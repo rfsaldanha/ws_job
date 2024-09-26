@@ -2,10 +2,16 @@ require(blastula)
 
 img_string <- add_image(file = "ws_job/selo_obs_h.png", 250)
 
+recipients <- c(
+  "raphael.saldanha@fiocruz.br",
+  "diego.ricardo@fiocruz.br",
+  "heglaucio.barros@fiocruz.br"
+)
+
 send_email <- function(email, subject){
   smtp_send(
     email = email,
-    to = "rfsaldanha@gmail.com",
+    to = recipients,
     from = "raphael.saldanha@fiocruz.br",
     subject = subject,
     credentials = creds_file("ws_job/smtp2go_creds"),
