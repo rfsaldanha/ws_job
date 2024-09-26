@@ -116,7 +116,7 @@ for(d in station_ids){
 dbDisconnect(con)
 
 # Save last end time
-saveRDS(object = now_ts, file = "last_update_time.rds")
+saveRDS(object = now_ts, file = "weatherlink_last_update_time.rds")
 
 # Final messages
 cli_alert_info("End of update.")
