@@ -5,7 +5,8 @@ img_string <- add_image(file = "ws_job/selo_obs_h.png", 250)
 recipients <- c(
   "raphael.saldanha@fiocruz.br",
   "diego.ricardo@fiocruz.br",
-  "heglaucio.barros@fiocruz.br"
+  "heglaucio.barros@fiocruz.br",
+  "lucas.carraro@fiocruz.br"
 )
 
 send_email <- function(email, subject){
