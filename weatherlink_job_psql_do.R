@@ -8,7 +8,6 @@ library(cli)
 library(rlang)
 library(blastula)
 library(glue)
-library(here)
 source("ws_job/emails.R")
 schema <- "estacoes"
 
