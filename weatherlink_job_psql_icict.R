@@ -33,7 +33,7 @@ con <- tryCatch(
   error=function(e) {
     cli_alert_warning("Could not connect to database.")
     message(e)
-    # send_email_database_error(e, "Conexão com o banco de dados local da WeatherLink")
+    send_email_database_error(e, "Conexão com o banco de dados local da WeatherLink")
     cli_abort("This update was aborted.")
   }
 )
