@@ -24,8 +24,8 @@ con <- tryCatch(
     dbConnect(
       RPostgres::Postgres(),
       dbname = "observatorio", 
-      host = "dbaas-db-7323920-do-user-737434-0.l.db.ondigitalocean.com",
-      port = 25060, # or any other port specified by your DBA
+      host = "psql.icict.fiocruz.br",
+      port = 5432,
       user = Sys.getenv("weather_user"),
       password = Sys.getenv("weather_password")
     )
