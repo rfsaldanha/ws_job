@@ -3,7 +3,9 @@ CREATE TABLE estacoes.station_195669_sensor_772002 (
 	sensor_type							integer,
 	battery_voltage						integer,
 	wifi_rssi							integer,
+	rapid_records_sent					text,
 	network_error						text,
+	ip_v4_address						text,
 	ip_v4_gateway						text,
 	bluetooth_version					text,
 	bgn									text,
@@ -116,5 +118,6 @@ CREATE TABLE estacoes.station_195669_sensor_772005 (
 	rain_rate_last_in					float8,
 	rain_rate_hi_last_15_min_mm			float8,
 	rain_rate_hi_last_15_min_in			float8,
+	tz_offset							integer,
 	ts									timestamp
 );
