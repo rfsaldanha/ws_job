@@ -99,7 +99,7 @@ for(d in device_ids){
       dbWriteTable(
         conn = con, 
         name = Id(schema, table_name), 
-        value = res[[s]], 
+        value = res, 
         append = TRUE
       )
     }, 
