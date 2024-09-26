@@ -95,7 +95,7 @@ for(d in station_ids){
           )
         }, 
         error=function(e) {
-          cli_alert_warning("Could not write data from station {d}, sensor {s} to database.")
+          cli_alert_warning("Could not write data from station {d}, sensor {res[[s]]$lsid} to database.")
           message(e)
           send_email_write_db_error(e, glue("Estação {d}, sensor {res[[s]]$lsid} da WeatherLink"))
           cli_abort("This update was aborted.")
