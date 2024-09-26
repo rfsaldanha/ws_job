@@ -80,7 +80,7 @@ for(d in station_ids){
     }
 
     if(!update_database){
-      cli_alert_danger("The current data from from station {d}, sensor {s} is the same of the last update. This sensor update will be skipped.")
+      cli_alert_danger("The current data from from station {d}, sensor {res[[s]]$lsid} is the same of the last update. This sensor update will be skipped.")
       next
     } else {
       # Write to database
@@ -97,7 +97,7 @@ for(d in station_ids){
         error=function(e) {
           cli_alert_warning("Could not write data from station {d}, sensor {s} to database.")
           message(e)
-          send_email_write_db_error(e, glue("Estação {d}, sensor {s} da WeatherLink"))
+          send_email_write_db_error(e, glue("Estação {d}, sensor {res[[s]]$lsid} da WeatherLink"))
           cli_abort("This update was aborted.")
         }
       )
