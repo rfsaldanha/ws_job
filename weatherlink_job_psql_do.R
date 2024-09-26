@@ -61,7 +61,7 @@ for(d in station_ids){
   
   # Write to database
   for(s in 1:length(res)){
-    table_name <- paste0(schema,".","station_",d,"_sensor_",res[[s]]$lsid)
+    table_name <- paste0("station_",d,"_sensor_",res[[s]]$lsid)
 
     # Check if data was already written
     last_update_file_name <- paste0("weatherlink_last_update_",table_name,".rds")
@@ -89,7 +89,7 @@ for(d in station_ids){
         {
           dbWriteTable(
             conn = con, 
-            name = table_name, 
+            name = c(schema, table_name), 
             value = res[[s]], 
             append = TRUE
           )
