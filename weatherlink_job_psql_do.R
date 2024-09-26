@@ -89,7 +89,7 @@ for(d in station_ids){
         {
           dbWriteTable(
             conn = con, 
-            name = c(schema, table_name), 
+            name = Id(schema, table_name), 
             value = res[[s]], 
             append = TRUE
           )
