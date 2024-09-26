@@ -10,6 +10,7 @@ library(blastula)
 library(glue)
 library(here)
 source("ws_job/emails.R")
+schema <- "estacoes"
 
 # sudo apt install tzdata-legacy
 
@@ -60,7 +61,7 @@ for(d in station_ids){
   
   # Write to database
   for(s in 1:length(res)){
-    table_name <- paste0("station_",d,"_sensor_",res[[s]]$lsid)
+    table_name <- paste0(schema,".","station_",d,"_sensor_",res[[s]]$lsid)
 
     # Check if data was already written
     last_update_file_name <- paste0("weatherlink_last_update_",table_name,".rds")
