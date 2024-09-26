@@ -9,7 +9,7 @@ library(rlang)
 library(blastula)
 library(glue)
 source("ws_job/emails.R")
-schema <- "estacao"
+schema <- "estacoes"
 
 # sudo apt install tzdata-legacy
 
