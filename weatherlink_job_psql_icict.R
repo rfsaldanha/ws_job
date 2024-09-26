@@ -60,7 +60,7 @@ for(d in station_ids){
   
   # Write to database
   for(s in 1:length(res)){
-    table_name <- paste0("tb_estacao_2_","_sensor_",res[[s]]$lsid)
+    table_name <- paste0("tb_estacao_2_sensor_",res[[s]]$lsid)
 
     # Check if data was already written
     last_update_file_name <- paste0("weatherlink_last_update_",table_name,".rds")
