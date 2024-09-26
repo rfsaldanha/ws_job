@@ -91,7 +91,7 @@ for(d in device_ids){
   }
 
   # Write to database
-  cli_alert("Writing new data from station {d}, sensor {s} to database...")
+  cli_alert("Writing new data from station {d} to database...")
   table_name <- paste0("station_",d)
   
   db_write <- tryCatch(
