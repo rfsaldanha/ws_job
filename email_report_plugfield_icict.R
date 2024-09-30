@@ -172,6 +172,69 @@ plot_chuva <- ggplot(data = res_chuva, aes(x = time, y = value)) +
 
 plot_chuva <- add_ggplot(plot_chuva, width = 7, height = 5)
 
+## Vento
+res_vento <- tbl(con, schema) |>
+  filter(sensor == 36) |>
+  filter(time >= time_uct) |>
+  collect() |>
+  mutate(
+    time = as_datetime(time, tz = "America/Sao_Paulo"),
+    name = "Vento"
+  )
+
+res_rajada <- tbl(con, schema) |>
+  filter(sensor == 37) |>
+  filter(time >= time_uct) |>
+  collect() |>
+  mutate(
+    time = as_datetime(time, tz = "America/Sao_Paulo"),
+    name = "Rajada"
+  )
+
+max_vento <- res_vento |>
+  filter(value == max(value, na.rm = TRUE)) |>
+  slice_tail(n = 1)
+
+max_rajada <- res_rajada |>
+  filter(value == max(value, na.rm = TRUE)) |>
+  slice_tail(n = 1)
+
+plot_vento <- ggplot(data = bind_rows(res_vento, res_rajada), aes(x = time, y = value, color = name)) +
+  geom_line() + 
+  labs(title = "Vento e rajada", x = "Data", y = "mm", color = NULL) +
+  theme_bw() +
+  theme(legend.position = "bottom", legend.direction = "horizontal") +
+  scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")  
+
+plot_vento <- add_ggplot(plot_vento, width = 7, height = 5)
+
+## Wifi
+res_wifi <- tbl(con, schema) |>
+  filter(sensor == 25) |>
+  filter(time >= time_uct) |>
+  collect() |>
+  mutate(time = as_datetime(time, tz = "America/Sao_Paulo"))
+
+plot_wifi <- ggplot(data = res_wifi, aes(x = time, y = value)) +
+  geom_line() + 
+  labs(title = "Sinal Wi-Fi da estação", x = "Data", y = "%") +
+  geom_smooth() +
+  theme_bw() +
+  scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")
+
+## Bateria
+res_bat <- tbl(con, schema) |>
+  filter(sensor == 1) |>
+  filter(time >= time_uct) |>
+  collect() |>
+  mutate(time = as_datetime(time, tz = "America/Sao_Paulo"))
+
+plot_bat <- ggplot(data = res_bat, aes(x = time, y = value)) +
+  geom_line() + 
+  labs(title = "Bateria da estação", x = "Data", y = "%") +
+  theme_bw() +
+  scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")
+
 # E-mail
 email <- compose_email(
   body = md(glue::glue(
@@ -190,6 +253,10 @@ email <- compose_email(
       Máxima: {max_press$value}hPa ({max_press$time})\n
       Mínima: {min_press$value}hPa ({min_press$time})
 
+      {plot_vento}
+      Vento máximo: {max_vento$value}Km/h ({max_vento$time})\n
+      Rajada máxima: {max_rajada$value}Km/h ({max_rajada$time})
+
       {plot_uv}
       Máxima: {max_uv$value}uv ({max_uv$time})\n
 
@@ -198,7 +265,11 @@ email <- compose_email(
       Mínima: {min_nrio$value}mca ({min_nrio$time})
 
       {plot_chuva}
-      Máxima: {max_chuva$value}mm ({max_chuva$time})\n
+      Máxima: {max_chuva$value}mm ({max_chuva$time})
+
+      {plot_wifi}
+
+      {plot_bat}
       ")),
   footer = md(glue::glue("{date_time}."))
 )
