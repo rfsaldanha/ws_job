@@ -15,6 +15,7 @@ recipients <- c(
   "diego.ricardo@fiocruz.br",
   "vanderlei.pascoal@fiocruz.br",
   "heglaucio.barros@fiocruz.br",
+  "renata.gracie@fiocruz.br",
   "christovam.barcellos@fiocruz.br"
 )
 
@@ -186,8 +187,8 @@ email <- compose_email(
       Mínima: {min_umid$value}% ({min_umid$time})
 
       {plot_press}
-      Máxima: {max_press$value}% ({max_press$time})\n
-      Mínima: {min_press$value}% ({min_press$time})
+      Máxima: {max_press$value}hPa ({max_press$time})\n
+      Mínima: {min_press$value}hPa ({min_press$time})
 
       {plot_uv}
       Máxima: {max_uv$value}uv ({max_uv$time})\n
