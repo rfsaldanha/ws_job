@@ -198,18 +198,16 @@ email <- compose_email(
 
       {plot_chuva}
       Máxima: {max_chuva$value}mm ({max_chuva$time})\n
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
       ")),
   footer = md(glue::glue("{date_time}."))
+)
+
+# Send email
+smtp_send(
+  email = email,
+  to = recipients,
+  from = "raphael.saldanha@fiocruz.br",
+  subject = "Relatório dos últimos sete dias da estação meteorológica Merajuba - Mojacuba",
+  credentials = creds_file("ws_job/smtp2go_creds"),
+  verbose = FALSE
 )
