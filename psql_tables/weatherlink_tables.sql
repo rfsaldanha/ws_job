@@ -2,7 +2,7 @@
 -- Manufacturer: 
 -- Data Structure Type: 15
 -- Data Structure Description: WeatherLink Live Health Record
-CREATE TABLE estacoes.station_195669_sensor_772002
+CREATE TABLE estacoes.tb_estacao_2_sensor_772002
 (
     lsid integer,
     sensor_type integer,
@@ -41,7 +41,7 @@ CREATE TABLE estacoes.station_195669_sensor_772002
 -- Manufacturer: Davis Instruments
 -- Data Structure Type: 12
 -- Data Structure Description: WeatherLink Live non-ISS Current Conditions Record
-CREATE TABLE estacoes.station_195669_sensor_772003
+CREATE TABLE estacoes.tb_estacao_2_sensor_772003
 (
     lsid integer,
     sensor_type integer,
@@ -57,7 +57,7 @@ CREATE TABLE estacoes.station_195669_sensor_772003
 -- Manufacturer: Davis Instruments
 -- Data Structure Type: 12
 -- Data Structure Description: WeatherLink Live non-ISS Current Conditions Record
-CREATE TABLE estacoes.station_195669_sensor_772004
+CREATE TABLE estacoes.tb_estacao_2_sensor_772004
 (
     lsid integer,
     sensor_type integer,
@@ -73,7 +73,7 @@ CREATE TABLE estacoes.station_195669_sensor_772004
 -- Manufacturer: Davis Instruments
 -- Data Structure Type: 10
 -- Data Structure Description: WeatherLink Live ISS Current Conditions Record
-CREATE TABLE estacoes.station_195669_sensor_772005
+CREATE TABLE estacoes.tb_estacao_2_sensor_772005
 (
     lsid integer,
     sensor_type integer,

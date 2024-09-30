@@ -1,4 +1,4 @@
-CREATE TABLE estacoes.station_4893
+CREATE TABLE estacoes.tb_estacao_1b
 (
     device integer,
     sensor integer,
