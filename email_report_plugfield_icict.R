@@ -121,6 +121,11 @@ max_uv <- res_uv |>
   slice_tail(n = 1)
 
 plot_uv <- ggplot(data = res_uv, aes(x = time, y = value)) +
+  annotate("rect", xmin=min(res_uv$time, na.rm = TRUE),xmax=max(res_uv$time, na.rm = TRUE),ymin=-Inf,ymax=3,alpha=0.3,fill="green") +
+  annotate("rect", xmin=min(res_uv$time, na.rm = TRUE),xmax=max(res_uv$time, na.rm = TRUE),ymin=3,ymax=6,alpha=0.3,fill="yellow") +
+  annotate("rect", xmin=min(res_uv$time, na.rm = TRUE),xmax=max(res_uv$time, na.rm = TRUE),ymin=6,ymax=8,alpha=0.3,fill="orange") +
+  annotate("rect", xmin=min(res_uv$time, na.rm = TRUE),xmax=max(res_uv$time, na.rm = TRUE),ymin=8,ymax=11,alpha=0.3,fill="red") +
+  annotate("rect", xmin=min(res_uv$time, na.rm = TRUE),xmax=max(res_uv$time, na.rm = TRUE),ymin=11,ymax=Inf,alpha=0.3,fill="purple") +
   geom_line() + 
   labs(title = "UV", x = "Data", y = "uv") +
   theme_bw() +
