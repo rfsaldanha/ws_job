@@ -1,3 +1,6 @@
+# Set locale
+invisible(Sys.setlocale("LC_ALL", "pt_BR.utf8"))
+
 # Packages
 library(DBI)
 library(RPostgres)
