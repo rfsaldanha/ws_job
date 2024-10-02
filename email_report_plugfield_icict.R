@@ -13,6 +13,7 @@ library(blastula)
 library(glue)
 library(lunar)
 library(gggibbous)
+library(reservatoriosBR)
 schema <- dbplyr::in_schema("estacoes", "tb_estacao_1b")
 
 # Email config
