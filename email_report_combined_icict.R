@@ -18,13 +18,13 @@ schema_weatherlink_sensor_772005 <- dbplyr::in_schema("estacoes", "tb_estacao_2_
 # Email config
 img_string <- add_image(file = "ws_job/selo_obs_h.png", 250)
 recipients <- c(
-  "raphael.saldanha@fiocruz.br"
-  #"diego.ricardo@fiocruz.br",
-  #"vanderlei.pascoal@fiocruz.br",
-  #"heglaucio.barros@fiocruz.br",
-  #"renata.gracie@fiocruz.br",
-  #"christovam.barcellos@fiocruz.br",
-  #"izabio2005@gmail.com"
+  "raphael.saldanha@fiocruz.br",
+  "diego.ricardo@fiocruz.br",
+  "vanderlei.pascoal@fiocruz.br",
+  "heglaucio.barros@fiocruz.br",
+  "renata.gracie@fiocruz.br",
+  "christovam.barcellos@fiocruz.br",
+  "izabio2005@gmail.com"
 )
 
 # Database connection
