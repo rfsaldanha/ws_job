@@ -167,7 +167,7 @@ min_nrio <- res_nrio |>
   filter(value == min(value, na.rm = TRUE)) |>
   slice_tail(n = 1)
 
-ggplot() +
+plot_nrio <- ggplot() +
   geom_line(data = res_nrio, aes(x = time, y = value)) + 
   geom_moon(data = res_nrio_moon, ratio = 1, size = 7, fill = "black", aes(x = date, y = yplot)) + 
   geom_moon(data = res_nrio_moon, size = 7, fill = "yellow", aes(x = date, y = yplot, ratio = percent), right = res_nrio_moon$phase == "first quarter") + 
