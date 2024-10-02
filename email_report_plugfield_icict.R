@@ -9,18 +9,20 @@ library(lubridate)
 library(dplyr)
 library(ggplot2)
 library(blastula)
+library(lunar)
+library(gggibbous)
 schema <- dbplyr::in_schema("estacoes", "tb_estacao_1b")
 
 # Email config
 img_string <- add_image(file = "ws_job/selo_obs_h.png", 250)
 recipients <- c(
-  "raphael.saldanha@fiocruz.br",
-  "diego.ricardo@fiocruz.br",
-  "vanderlei.pascoal@fiocruz.br",
-  "heglaucio.barros@fiocruz.br",
-  "renata.gracie@fiocruz.br",
-  "christovam.barcellos@fiocruz.br",
-  "izabio2005@gmail.com"
+  "raphael.saldanha@fiocruz.br"
+  #"diego.ricardo@fiocruz.br",
+  #"vanderlei.pascoal@fiocruz.br",
+  #"heglaucio.barros@fiocruz.br",
+  #"renata.gracie@fiocruz.br",
+  #"christovam.barcellos@fiocruz.br",
+  #"izabio2005@gmail.com"
 )
 
 # Plugfield
@@ -146,6 +148,17 @@ res_nrio <- tbl(con, schema) |>
   collect() |>
   mutate(time = as_datetime(time, tz = "America/Sao_Paulo"))
 
+res_nrio_moon <- res_nrio |>
+  mutate(date = as_datetime(date(time))) |>
+  select(date) |>
+  distinct(date) |>
+  mutate(
+    date = date + hours(3),
+    phase = lunar.phase(x = date, name = 8),
+    percent = 1-(lunar.phase(x = date))/(2*pi),
+    yplot = max(res_nrio$value)+.1
+  )
+
 max_nrio <- res_nrio |>
   filter(value == max(value, na.rm = TRUE)) |>
   slice_tail(n = 1)
@@ -154,8 +167,10 @@ min_nrio <- res_nrio |>
   filter(value == min(value, na.rm = TRUE)) |>
   slice_tail(n = 1)
 
-plot_nrio <- ggplot(data = res_nrio, aes(x = time, y = value)) +
-  geom_line() + 
+ggplot() +
+  geom_line(data = res_nrio, aes(x = time, y = value)) + 
+  geom_moon(data = res_nrio_moon, ratio = 1, size = 7, fill = "black", aes(x = date, y = yplot)) + 
+  geom_moon(data = res_nrio_moon, size = 7, fill = "yellow", aes(x = date, y = yplot, ratio = percent), right = res_nrio_moon$phase == "first quarter") + 
   labs(title = "Nível do rio", x = "Data", y = "mca") +
   theme_bw() +
   scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")
