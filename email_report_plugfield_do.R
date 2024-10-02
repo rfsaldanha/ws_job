@@ -13,26 +13,27 @@ library(blastula)
 library(glue)
 library(lunar)
 library(gggibbous)
-schema <- dbplyr::in_schema("estacoes", "tb_estacao_1b")
+library(reservatoriosBR)
+schema <- dbplyr::in_schema("estacoes", "station_4893")
 
 # Email config
 img_string <- add_image(file = "ws_job/selo_obs_h.png", 250)
 recipients <- c(
-  "raphael.saldanha@fiocruz.br"
-  #"diego.ricardo@fiocruz.br",
-  #"vanderlei.pascoal@fiocruz.br",
-  #"heglaucio.barros@fiocruz.br",
-  #"renata.gracie@fiocruz.br",
-  #"christovam.barcellos@fiocruz.br",
-  #"izabio2005@gmail.com"
+  "raphael.saldanha@fiocruz.br",
+  "diego.ricardo@fiocruz.br",
+  "vanderlei.pascoal@fiocruz.br",
+  "heglaucio.barros@fiocruz.br",
+  "renata.gracie@fiocruz.br",
+  "christovam.barcellos@fiocruz.br",
+  "izabio2005@gmail.com"
 )
 
 # Plugfield
 con <- dbConnect(
   RPostgres::Postgres(),
-  dbname = "observatorio", 
-  host = "psql.icict.fiocruz.br",
-  port = 5432,
+  dbname = "plugfield", 
+  host = "dbaas-db-7323920-do-user-737434-0.l.db.ondigitalocean.com",
+  port = 25060,
   user = Sys.getenv("weather_user"),
   password = Sys.getenv("weather_password")
 )
@@ -290,6 +291,8 @@ plot_tucurui_afluencia <- ggplot(data = res_tucurui, aes(x = data, y = afluencia
   scale_x_date(date_labels = "%b %d", date_breaks = "1 day")
 
 plot_tucurui_afluencia <- add_ggplot(plot_tucurui_afluencia, width = 7, height = 5)
+
+
 
 # E-mail
 email <- compose_email(

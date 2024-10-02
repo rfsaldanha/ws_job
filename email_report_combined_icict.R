@@ -9,6 +9,7 @@ library(lubridate)
 library(dplyr)
 library(ggplot2)
 library(blastula)
+library(glue)
 schema_plugfield <- dbplyr::in_schema("estacoes", "tb_estacao_1b")
 schema_weatherlink_sensor_772002 <- dbplyr::in_schema("estacoes", "tb_estacao_2_sensor_772002")
 schema_weatherlink_sensor_772003 <- dbplyr::in_schema("estacoes", "tb_estacao_2_sensor_772003")
@@ -203,10 +204,14 @@ dbDisconnect(con)
 
 # E-mail
 email <- compose_email(
-  body = md(glue::glue(
-      "{img_string}
-      Relatório comparativo dos últimos sete dias das estações meteorológicas de Cametá e Merajuba/Mocajuba
-      
+  header = blocks(
+    block_text(md(glue("{img_string}")))
+  ),
+  body = blocks(
+    block_text(md("## Relatório comparativo")),
+    block_text(md("### Últimos sete dias das estações meteorológicas de Cametá e Merajuba/Mocajuba")),
+    block_text(md(glue(
+      "
       {plot_temp}
 
       {plot_umid}
@@ -216,8 +221,10 @@ email <- compose_email(
       {plot_vento}
 
       {plot_chuva}
-      ")),
-  footer = md(glue::glue("{date_time}."))
+      "
+    )))
+  ),
+  footer = md(glue("{date_time}."))
 )
 
 # Send email

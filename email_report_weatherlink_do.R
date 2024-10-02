@@ -9,6 +9,7 @@ library(lubridate)
 library(dplyr)
 library(ggplot2)
 library(blastula)
+library(glue)
 schema_sensor_772002 <- dbplyr::in_schema("estacoes", "station_195669_sensor_772002")
 schema_sensor_772003 <- dbplyr::in_schema("estacoes", "station_195669_sensor_772003")
 schema_sensor_772004 <- dbplyr::in_schema("estacoes", "station_195669_sensor_772004")
@@ -200,10 +201,14 @@ dbDisconnect(con)
 
 # E-mail
 email <- compose_email(
-  body = md(glue::glue(
-      "{img_string}
-      Relatório dos últimos sete dias da estação meteorológica Cametá (Davis Weatherlink 195669)
-      
+  header = blocks(
+    block_text(md(glue("{img_string}")))
+  ),
+  body = blocks(
+    block_text(md("## Relatório da estação meteorológica Cametá (Davis Weatherlink 195669)")),
+    block_text(md("### Últimos sete dias")),
+    block_text(md(glue(
+      "
       {plot_temp}
       Máxima: {max_temp$value}ºC ({max_temp$time})\n
       Mínima: {min_temp$value}ºC ({min_temp$time})
@@ -218,14 +223,6 @@ email <- compose_email(
 
       {plot_vento}
       Vento máximo: {max_vento$value}Km/h ({max_vento$time})\n
-      Rajada máxima: {max_rajada$value}Km/h ({max_rajada$time})
-
-      {plot_uv}
-      Máxima: {max_uv$value}uv ({max_uv$time})\n
-
-      {plot_nrio}
-      Máxima: {max_nrio$value}mca ({max_nrio$time})\n
-      Mínima: {min_nrio$value}mca ({min_nrio$time})
 
       {plot_chuva}
       Máxima: {max_chuva$value}mm ({max_chuva$time})
@@ -233,8 +230,10 @@ email <- compose_email(
       {plot_wifi}
 
       {plot_bat}
-      ")),
-  footer = md(glue::glue("{date_time}."))
+      "
+    )))
+  ),
+  footer = md(glue("{date_time}."))
 )
 
 # Send email
