@@ -195,6 +195,9 @@ plot_vento <- ggplot(data = bind_rows(res_vento_weatherlink, res_vento_plugfield
 
 plot_vento <- add_ggplot(plot_vento, width = 7, height = 5)
 
+# Database disconnect
+dbDisconnect(con)
+
 # E-mail
 email <- compose_email(
   body = md(glue::glue(

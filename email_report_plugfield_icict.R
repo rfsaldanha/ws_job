@@ -245,6 +245,9 @@ plot_bat <- ggplot(data = res_bat, aes(x = time, y = value)) +
 
 plot_bat <- add_ggplot(plot_bat, width = 7, height = 5)
 
+# Database disconnect
+dbDisconnect(con)
+
 # E-mail
 email <- compose_email(
   body = md(glue::glue(
