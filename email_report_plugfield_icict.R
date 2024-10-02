@@ -274,7 +274,7 @@ res_tucurui <- reservatorio_sin(19134, data_inicial = time_local) |>
   rename(date = data) |>
   complete(date = c(unique(date), today()))
 
-plot_tucurui_cota <- ggplot(data = res_tucurui, aes(x = data, y = cota_m)) +
+plot_tucurui_cota <- ggplot(data = res_tucurui, aes(x = date, y = cota_m)) +
   geom_line() + 
   labs(title = "Cota Usina Tucuruí", x = "Data", y = "m",
     subtitle = "Dados do SAR/SIN/ANA") +
@@ -283,7 +283,7 @@ plot_tucurui_cota <- ggplot(data = res_tucurui, aes(x = data, y = cota_m)) +
 
 plot_tucurui_cota <- add_ggplot(plot_tucurui_cota, width = 7, height = 5)
 
-plot_tucurui_afluencia <- ggplot(data = res_tucurui, aes(x = data, y = afluencia_m3_s)) +
+plot_tucurui_afluencia <- ggplot(data = res_tucurui, aes(x = date, y = afluencia_m3_s)) +
   geom_line() + 
   labs(title = "Afluência Usina Tucuruí", x = "Data", y = "m3/s",
     subtitle = "Dados do SAR/SIN/ANA") +
