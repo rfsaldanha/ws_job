@@ -272,7 +272,7 @@ dbDisconnect(con)
 # Reservatório Tucuruí
 res_tucurui <- reservatorio_sin(19134, data_inicial = time_local) |>
   rename(date = data) |>
-  complete(date = c(unique(date), tucurui_dates, today()))
+  complete(date = c(unique(date), today()))
 
 plot_tucurui_cota <- ggplot(data = res_tucurui, aes(x = data, y = cota_m)) +
   geom_line() + 
