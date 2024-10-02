@@ -56,11 +56,13 @@ res_temp <- tbl(con, schema_sensor_772005) |>
 
 max_temp <- res_temp |>
   filter(value == max(value, na.rm = TRUE)) |>
-  slice_tail(n = 1)
+  slice_tail(n = 1) |>
+  mutate(value = round(value, 2))
 
 min_temp <- res_temp |>
   filter(value == min(value, na.rm = TRUE)) |>
-  slice_tail(n = 1)
+  slice_tail(n = 1) |>
+    mutate(value = round(value, 2))
 
 plot_temp <- ggplot(data = res_temp, aes(x = time, y = value)) +
   geom_line() + 
@@ -79,11 +81,13 @@ res_umid <- tbl(con, schema_sensor_772005) |>
 
 max_umid <- res_umid |>
   filter(value == max(value, na.rm = TRUE)) |>
-  slice_tail(n = 1)
+  slice_tail(n = 1) |>
+    mutate(value = round(value, 2))
 
 min_umid <- res_umid |>
   filter(value == min(value, na.rm = TRUE)) |>
-  slice_tail(n = 1)
+  slice_tail(n = 1) |>
+    mutate(value = round(value, 2))
 
 plot_umid <- ggplot(data = res_umid, aes(x = time, y = value)) +
   geom_line() + 
@@ -105,11 +109,13 @@ res_press <- tbl(con, schema_sensor_772003) |>
 
 max_press <- res_press |>
   filter(value == max(value, na.rm = TRUE)) |>
-  slice_tail(n = 1)
+  slice_tail(n = 1) |>
+    mutate(value = round(value, 2))
 
 min_press <- res_press |>
   filter(value == min(value, na.rm = TRUE)) |>
-  slice_tail(n = 1)
+  slice_tail(n = 1) |>
+  mutate(value = round(value, 2))
 
 plot_press <- ggplot(data = res_press, aes(x = time, y = value)) +
   geom_line() + 
@@ -128,7 +134,8 @@ res_chuva <- tbl(con, schema_sensor_772005) |>
 
 max_chuva <- res_chuva |>
   filter(value == max(value, na.rm = TRUE)) |>
-  slice_tail(n = 1)
+  slice_tail(n = 1) |>
+  mutate(value = round(value, 2))
 
 plot_chuva <- ggplot(data = res_chuva, aes(x = time, y = value)) +
   geom_line() + 
@@ -150,7 +157,8 @@ res_vento <- tbl(con, schema_sensor_772005) |>
 
 max_vento <- res_vento |>
   filter(value == max(value, na.rm = TRUE)) |>
-  slice_tail(n = 1)
+  slice_tail(n = 1) |>
+  mutate(value = round(value, 2))
 
 plot_vento <- ggplot(data = res_vento, aes(x = time, y = value)) +
   geom_line() + 
@@ -228,7 +236,7 @@ smtp_send(
   email = email,
   to = recipients,
   from = "raphael.saldanha@fiocruz.br",
-  subject = "Relatório dos últimos sete dias da estação meteorológica Merajuba - Mojacuba",
+  subject = "Relatório dos últimos sete dias da estação meteorológica Cametá",
   credentials = creds_file("ws_job/smtp2go_creds"),
   verbose = FALSE
 )
