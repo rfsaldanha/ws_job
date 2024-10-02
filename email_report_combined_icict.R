@@ -1,5 +1,5 @@
 # Set locale
-Sys.setlocale("LC_ALL", "pt_BR.utf8")
+Sys.setlocale("LC_ALL", "pt_BR")
 
 # Packages
 library(DBI)
