@@ -212,14 +212,6 @@ email <- compose_email(
 
       {plot_vento}
       Vento máximo: {max_vento$value}Km/h ({max_vento$time})\n
-      Rajada máxima: {max_rajada$value}Km/h ({max_rajada$time})
-
-      {plot_uv}
-      Máxima: {max_uv$value}uv ({max_uv$time})\n
-
-      {plot_nrio}
-      Máxima: {max_nrio$value}mca ({max_nrio$time})\n
-      Mínima: {min_nrio$value}mca ({min_nrio$time})
 
       {plot_chuva}
       Máxima: {max_chuva$value}mm ({max_chuva$time})
