@@ -141,7 +141,8 @@ plot_chuva <- ggplot(data = res_chuva, aes(x = time, y = value)) +
   geom_line() + 
   labs(title = "Chuva", x = "Data", y = "mm") +
   theme_bw() +
-  scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")  
+  scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day") +
+  expand_limits(y=0)
 
 plot_chuva <- add_ggplot(plot_chuva, width = 7, height = 5)
 
@@ -165,7 +166,8 @@ plot_vento <- ggplot(data = res_vento, aes(x = time, y = value)) +
   labs(title = "Vento", x = "Data", y = "mm", color = NULL) +
   theme_bw() +
   theme(legend.position = "bottom", legend.direction = "horizontal") +
-  scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")  
+  scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day") +
+  expand_limits(y=0)
 
 plot_vento <- add_ggplot(plot_vento, width = 7, height = 5)
 
