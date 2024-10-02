@@ -104,7 +104,7 @@ res_press <- tbl(con, schema_sensor_772003) |>
   collect() |>
   mutate(
     time = as_datetime(time, tz = "America/Sao_Paulo"),
-    value2 = value*33.864
+    value = value*33.864
   )
 
 max_press <- res_press |>
