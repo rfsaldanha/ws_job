@@ -51,7 +51,7 @@ con_plugfield <- dbConnect(
 
 
 # Horário referência
-date_time <- add_readable_time()
+date_time <- format(now(), "%A, %e de %B de %Y, às %R (%Z)")
 time_local <- now() - days(7)
 time_uct <- as_datetime(time_local, tz = "UTC")
 
