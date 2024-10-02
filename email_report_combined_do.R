@@ -228,7 +228,7 @@ smtp_send(
   email = email,
   to = recipients,
   from = "raphael.saldanha@fiocruz.br",
-  subject = "Relatório dos últimos sete dias das estações meteorológicas de Cametá e Merajuba/Mocajuba",
+  subject = "Relatório comparativo dos últimos sete dias das estações meteorológicas de Cametá e Merajuba/Mocajuba",
   credentials = creds_file("ws_job/smtp2go_creds"),
   verbose = FALSE
 )
