@@ -22,7 +22,7 @@ cli_alert_info("Job start: {now()}")
 
 ## Load end time from previous run as start time of this run
 start_time <- readRDS(file = "plugfield_last_end_time.rds")
-end_time <- format(now(tzone = "Brazil/East"), "%d/%m/%Y %H:%M:%S")
+end_time <- format(now(tzone = "UTC"), "%d/%m/%Y %H:%M:%S")
 
 # Database connection
 con <- tryCatch(
