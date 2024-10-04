@@ -11,9 +11,7 @@ recipients_db <- c(
 
 recipients_device <- c(
   "raphael.saldanha@fiocruz.br",
-  "diego.ricardo@fiocruz.br",
-  "heglaucio.barros@fiocruz.br",
-  "lucas.carraro@fiocruz.br"
+  "diego.ricardo@fiocruz.br"
 )
 
 send_email <- function(email, recipients, subject){
