@@ -13,19 +13,20 @@ library(blastula)
 library(glue)
 library(lunar)
 library(gggibbous)
+# devtools::install_github('brunomioto/reservatoriosBR')
 library(reservatoriosBR)
 schema <- dbplyr::in_schema("estacoes", "tb_estacao_1b")
 
 # Email config
 img_string <- add_image(file = "ws_job/selo_obs_h.png", 250)
 recipients <- c(
-  "raphael.saldanha@fiocruz.br",
-  "diego.ricardo@fiocruz.br",
-  "vanderlei.pascoal@fiocruz.br",
-  "heglaucio.barros@fiocruz.br",
-  "renata.gracie@fiocruz.br",
-  "christovam.barcellos@fiocruz.br",
-  "izabio2005@gmail.com"
+  "raphael.saldanha@fiocruz.br"
+  #"diego.ricardo@fiocruz.br",
+  #"vanderlei.pascoal@fiocruz.br",
+  #"heglaucio.barros@fiocruz.br",
+  #"renata.gracie@fiocruz.br",
+  #"christovam.barcellos@fiocruz.br",
+  #"izabio2005@gmail.com"
 )
 
 # Plugfield
@@ -158,7 +159,8 @@ res_nrio_moon <- res_nrio |>
   mutate(
     date = date + hours(3),
     phase = lunar.phase(x = date, name = 8),
-    percent = (lunar.phase(x = date))/(2*pi),
+    rad = lunar.phase(x = dates),
+    percent = ifelse(rad >= pi, (pi - (rad - pi))/(pi), rad/(pi)),
     yplot = max(res_nrio$value)+.1
   )
 
