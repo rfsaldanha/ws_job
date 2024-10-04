@@ -159,7 +159,7 @@ res_nrio_moon <- res_nrio |>
   mutate(
     date = date + hours(3),
     phase = lunar.phase(x = date, name = 8),
-    rad = lunar.phase(x = dates),
+    rad = lunar.phase(x = date),
     percent = ifelse(rad >= pi, (pi - (rad - pi))/(pi), rad/(pi)),
     yplot = max(res_nrio$value)+.1
   )
