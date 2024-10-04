@@ -2,14 +2,21 @@ require(blastula)
 
 img_string <- add_image(file = "ws_job/selo_obs_h.png", 250)
 
-recipients <- c(
+recipients_db <- c(
   "raphael.saldanha@fiocruz.br",
   "diego.ricardo@fiocruz.br",
   "heglaucio.barros@fiocruz.br",
   "lucas.carraro@fiocruz.br"
 )
 
-send_email <- function(email, subject){
+recipients_device <- c(
+  "raphael.saldanha@fiocruz.br",
+  "diego.ricardo@fiocruz.br",
+  "heglaucio.barros@fiocruz.br",
+  "lucas.carraro@fiocruz.br"
+)
+
+send_email <- function(email, recipients, subject){
   smtp_send(
     email = email,
     to = recipients,
@@ -43,7 +50,7 @@ send_email_database_error <- function(e, context){
     footer = md(glue::glue("{date_time}."))
   )
 
-  send_email(email, "Erro na conexão com o banco de dados")
+  send_email(email, recipients_db, "Erro na conexão com o banco de dados")
 }
 
 
@@ -70,7 +77,7 @@ send_email_data_retrieve_error <- function(e, context){
     footer = md(glue::glue("{date_time}."))
   )
 
-  send_email(email, "Erro no acesso de dados da estação")
+  send_email(email, recipients_device, "Erro no acesso de dados da estação")
 }
 
 send_email_write_db_error <- function(e, context){
@@ -96,7 +103,7 @@ send_email_write_db_error <- function(e, context){
     footer = md(glue::glue("{date_time}."))
   )
 
-  send_email(email, "Erro ao escrever os dados da estação no banco de dados")
+  send_email(email, recipients_db, "Erro ao escrever os dados da estação no banco de dados")
 }
 
 
@@ -108,10 +115,10 @@ send_email_device_offline <- function(d, since){
         "{img_string}
         Olá,
 
-        A estação {d} está fora do ar deste {since}.
+        A estação {d} está fora do ar deste {since} (UTC).
         ")),
     footer = md(glue::glue("{date_time}."))
   )
 
-  send_email(email, "Estação fora do ar")
+  send_email(email, recipients_device, "Estação fora do ar")
 }
