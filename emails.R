@@ -98,3 +98,20 @@ send_email_write_db_error <- function(e, context){
 
   send_email(email, "Erro ao escrever os dados da estação no banco de dados")
 }
+
+
+send_email_device_offline <- function(d, since){
+  date_time <- add_readable_time()
+
+  email <- compose_email(
+    body = md(glue::glue(
+        "{img_string}
+        Olá,
+
+        A estação {d} está fora do ar deste {since}.
+        ")),
+    footer = md(glue::glue("{date_time}."))
+  )
+
+  send_email(email, "Estação fora do ar")
+}
