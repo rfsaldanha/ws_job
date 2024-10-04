@@ -62,9 +62,11 @@ for(d in device_ids){
 
   ## Check if device is updated
   last_device_update <- device_last_update(d)
-  current_time <- lubridate::as_datetime(end_time, format = "%d/%m/%Y %H:%M:%S")
-  if(last_device_update <= current_time){
-    cli_alert_warning("Last update from station {d} was at {last_device_update}.")
+  current_time <- as_datetime(end_time, format = "%d/%m/%Y %H:%M:%S")
+  diff_time <- difftime(current_time, last_device_update, units = "mins")
+  
+  if(diff_time >= 15){
+    cli_alert_danger("Last update from station {d} was at {last_device_update}.")
     send_email_device_offline(paste("Plugfield", d), last_device_update)
     cli_abort("This update was aborted.")
   }

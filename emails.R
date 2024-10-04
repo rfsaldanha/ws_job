@@ -113,10 +113,10 @@ send_email_device_offline <- function(d, since){
         "{img_string}
         Olá,
 
-        A estação {d} está fora do ar deste {since} (UTC).
+        A estação {d} está sem comunicação deste {since} (UTC).
         ")),
     footer = md(glue::glue("{date_time}."))
   )
 
-  send_email(email, recipients_device, "Estação fora do ar")
+  send_email(email, recipients_device, "Estação sem comunicação")
 }
