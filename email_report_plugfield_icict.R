@@ -175,7 +175,7 @@ min_nrio <- res_nrio |>
 plot_nrio <- ggplot() +
   geom_line(data = res_nrio, aes(x = time, y = value)) + 
   geom_moon(data = res_nrio_moon, ratio = 1, size = 7, fill = "yellow", aes(x = date, y = yplot)) + 
-  geom_moon(data = res_nrio_moon, size = 7, fill = "black", aes(x = date, y = yplot, ratio = percent), right = res_nrio_moon$phase == "first quarter") + 
+  geom_moon(data = res_nrio_moon, size = 7, fill = "black", aes(x = date, y = yplot, ratio = 1-percent), right = res_nrio_moon$phase == "first quarter") + 
   labs(title = "Nível do rio", x = "Data", y = "mca") +
   theme_bw() +
   scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")
