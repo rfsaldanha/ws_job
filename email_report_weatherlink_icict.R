@@ -10,10 +10,22 @@ library(dplyr)
 library(ggplot2)
 library(blastula)
 library(glue)
-schema_sensor_772002 <- dbplyr::in_schema("estacoes", "tb_estacao_2_sensor_772002")
-schema_sensor_772003 <- dbplyr::in_schema("estacoes", "tb_estacao_2_sensor_772003")
-schema_sensor_772004 <- dbplyr::in_schema("estacoes", "tb_estacao_2_sensor_772004")
-schema_sensor_772005 <- dbplyr::in_schema("estacoes", "tb_estacao_2_sensor_772005")
+schema_sensor_772002 <- dbplyr::in_schema(
+  "estacoes",
+  "tb_estacao_2_sensor_772002"
+)
+schema_sensor_772003 <- dbplyr::in_schema(
+  "estacoes",
+  "tb_estacao_2_sensor_772003"
+)
+schema_sensor_772004 <- dbplyr::in_schema(
+  "estacoes",
+  "tb_estacao_2_sensor_772004"
+)
+schema_sensor_772005 <- dbplyr::in_schema(
+  "estacoes",
+  "tb_estacao_2_sensor_772005"
+)
 
 # Email config
 img_string <- add_image(file = "ws_job/selo_obs_h.png", 250)
@@ -24,13 +36,14 @@ recipients <- c(
   "heglaucio.barros@fiocruz.br",
   "renata.gracie@fiocruz.br",
   "christovam.barcellos@fiocruz.br",
-  "izabio2005@gmail.com"
+  "izabio2005@gmail.com",
+  "wagnerbm2006@gmail.com"
 )
 
 # Weatherlink
 con <- dbConnect(
   RPostgres::Postgres(),
-  dbname = "observatorio", 
+  dbname = "observatorio",
   host = "psql.icict.fiocruz.br",
   port = 5432,
   user = Sys.getenv("weather_user"),
@@ -39,7 +52,6 @@ con <- dbConnect(
 
 # Lista tabelas
 # dbListObjects(con, Id(schema = 'estacoes'))
-
 
 # Horário referência
 date_time <- format(now(), "%A, %e de %B de %Y, às %R (%Z)")
@@ -55,7 +67,7 @@ res_temp <- tbl(con, schema_sensor_772005) |>
   collect() |>
   mutate(
     time = as_datetime(time, tz = "America/Sao_Paulo"),
-    value = (value - 32)/1.8
+    value = (value - 32) / 1.8
   )
 
 max_temp <- res_temp |>
@@ -66,10 +78,10 @@ max_temp <- res_temp |>
 min_temp <- res_temp |>
   filter(value == min(value, na.rm = TRUE)) |>
   slice_tail(n = 1) |>
-    mutate(value = round(value, 2))
+  mutate(value = round(value, 2))
 
 plot_temp <- ggplot(data = res_temp, aes(x = time, y = value)) +
-  geom_line() + 
+  geom_line() +
   labs(title = "Temperatura", x = "Data", y = "ºC") +
   theme_bw() +
   scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")
@@ -86,15 +98,15 @@ res_umid <- tbl(con, schema_sensor_772005) |>
 max_umid <- res_umid |>
   filter(value == max(value, na.rm = TRUE)) |>
   slice_tail(n = 1) |>
-    mutate(value = round(value, 2))
+  mutate(value = round(value, 2))
 
 min_umid <- res_umid |>
   filter(value == min(value, na.rm = TRUE)) |>
   slice_tail(n = 1) |>
-    mutate(value = round(value, 2))
+  mutate(value = round(value, 2))
 
 plot_umid <- ggplot(data = res_umid, aes(x = time, y = value)) +
-  geom_line() + 
+  geom_line() +
   labs(title = "Umidade", x = "Data", y = "%") +
   theme_bw() +
   scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")
@@ -108,13 +120,13 @@ res_press <- tbl(con, schema_sensor_772003) |>
   collect() |>
   mutate(
     time = as_datetime(time, tz = "America/Sao_Paulo"),
-    value = value*33.864
+    value = value * 33.864
   )
 
 max_press <- res_press |>
   filter(value == max(value, na.rm = TRUE)) |>
   slice_tail(n = 1) |>
-    mutate(value = round(value, 2))
+  mutate(value = round(value, 2))
 
 min_press <- res_press |>
   filter(value == min(value, na.rm = TRUE)) |>
@@ -122,7 +134,7 @@ min_press <- res_press |>
   mutate(value = round(value, 2))
 
 plot_press <- ggplot(data = res_press, aes(x = time, y = value)) +
-  geom_line() + 
+  geom_line() +
   labs(title = "Pressão", x = "Data", y = "hPa") +
   theme_bw() +
   scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")
@@ -142,10 +154,10 @@ max_chuva <- res_chuva |>
   mutate(value = round(value, 2))
 
 plot_chuva <- ggplot(data = res_chuva, aes(x = time, y = value)) +
-  geom_line() + 
+  geom_line() +
   labs(title = "Chuva", x = "Data", y = "mm") +
   theme_bw() +
-  scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")  
+  scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")
 
 plot_chuva <- add_ggplot(plot_chuva, width = 7, height = 5)
 
@@ -165,11 +177,11 @@ max_vento <- res_vento |>
   mutate(value = round(value, 2))
 
 plot_vento <- ggplot(data = res_vento, aes(x = time, y = value)) +
-  geom_line() + 
+  geom_line() +
   labs(title = "Vento", x = "Data", y = "mm", color = NULL) +
   theme_bw() +
   theme(legend.position = "bottom", legend.direction = "horizontal") +
-  scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")  
+  scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")
 
 plot_vento <- add_ggplot(plot_vento, width = 7, height = 5)
 
@@ -181,7 +193,7 @@ res_wifi <- tbl(con, schema_sensor_772002) |>
   mutate(time = as_datetime(time, tz = "America/Sao_Paulo"))
 
 plot_wifi <- ggplot(data = res_wifi, aes(x = time, y = value)) +
-  geom_line() + 
+  geom_line() +
   labs(title = "Sinal Wi-Fi da estação", x = "Data", y = "rssi") +
   geom_smooth() +
   theme_bw() +
@@ -197,7 +209,7 @@ res_bat <- tbl(con, schema_sensor_772002) |>
   mutate(time = as_datetime(time, tz = "America/Sao_Paulo"))
 
 plot_bat <- ggplot(data = res_bat, aes(x = time, y = value)) +
-  geom_line() + 
+  geom_line() +
   labs(title = "Bateria da estação", x = "Data", y = "millivolts") +
   theme_bw() +
   scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")
@@ -213,7 +225,9 @@ email <- compose_email(
     block_text(md(glue("{img_string}")))
   ),
   body = blocks(
-    block_text(md("## Relatório da estação meteorológica Cametá (Davis Weatherlink 195669)")),
+    block_text(md(
+      "## Relatório da estação meteorológica Cametá (Davis Weatherlink 195669)"
+    )),
     block_text(md("### Últimos sete dias")),
     block_text(md(glue(
       "

@@ -11,10 +11,22 @@ library(ggplot2)
 library(blastula)
 library(glue)
 schema_plugfield <- dbplyr::in_schema("estacoes", "tb_estacao_1b")
-schema_weatherlink_sensor_772002 <- dbplyr::in_schema("estacoes", "tb_estacao_2_sensor_772002")
-schema_weatherlink_sensor_772003 <- dbplyr::in_schema("estacoes", "tb_estacao_2_sensor_772003")
-schema_weatherlink_sensor_772004 <- dbplyr::in_schema("estacoes", "tb_estacao_2_sensor_772004")
-schema_weatherlink_sensor_772005 <- dbplyr::in_schema("estacoes", "tb_estacao_2_sensor_772005")
+schema_weatherlink_sensor_772002 <- dbplyr::in_schema(
+  "estacoes",
+  "tb_estacao_2_sensor_772002"
+)
+schema_weatherlink_sensor_772003 <- dbplyr::in_schema(
+  "estacoes",
+  "tb_estacao_2_sensor_772003"
+)
+schema_weatherlink_sensor_772004 <- dbplyr::in_schema(
+  "estacoes",
+  "tb_estacao_2_sensor_772004"
+)
+schema_weatherlink_sensor_772005 <- dbplyr::in_schema(
+  "estacoes",
+  "tb_estacao_2_sensor_772005"
+)
 
 # Email config
 img_string <- add_image(file = "ws_job/selo_obs_h.png", 250)
@@ -25,13 +37,14 @@ recipients <- c(
   "heglaucio.barros@fiocruz.br",
   "renata.gracie@fiocruz.br",
   "christovam.barcellos@fiocruz.br",
-  "izabio2005@gmail.com"
+  "izabio2005@gmail.com",
+  "wagnerbm2006@gmail.com"
 )
 
 # Database connection
 con <- dbConnect(
   RPostgres::Postgres(),
-  dbname = "observatorio", 
+  dbname = "observatorio",
   host = "psql.icict.fiocruz.br",
   port = 5432,
   user = Sys.getenv("weather_user"),
@@ -40,7 +53,6 @@ con <- dbConnect(
 
 # Lista tabelas
 # dbListObjects(con, Id(schema = 'estacoes'))
-
 
 # Horário referência
 date_time <- format(now(), "%A, %e de %B de %Y, às %R (%Z)")
@@ -56,7 +68,7 @@ res_temp_weatherlink <- tbl(con, schema_weatherlink_sensor_772005) |>
   collect() |>
   mutate(
     time = as_datetime(time, tz = "America/Sao_Paulo"),
-    value = (value - 32)/1.8,
+    value = (value - 32) / 1.8,
     name = "Cametá"
   )
 
@@ -70,8 +82,11 @@ res_temp_plugfield <- tbl(con, schema_plugfield) |>
     name = "Merajuba/Mocajuba"
   )
 
-plot_temp <- ggplot(data = bind_rows(res_temp_weatherlink, res_temp_plugfield), aes(x = time, y = value, color = name)) +
-  geom_line(alpha = .7) + 
+plot_temp <- ggplot(
+  data = bind_rows(res_temp_weatherlink, res_temp_plugfield),
+  aes(x = time, y = value, color = name)
+) +
+  geom_line(alpha = .7) +
   labs(title = "Temperatura", x = "Data", y = "ºC", color = NULL) +
   theme_bw() +
   scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day") +
@@ -100,9 +115,11 @@ res_umid_plugfield <- tbl(con, schema_plugfield) |>
   )
 
 
-
-plot_umid <- ggplot(data = bind_rows(res_umid_weatherlink, res_umid_plugfield), aes(x = time, y = value, color = name)) +
-  geom_line(alpha = .7) + 
+plot_umid <- ggplot(
+  data = bind_rows(res_umid_weatherlink, res_umid_plugfield),
+  aes(x = time, y = value, color = name)
+) +
+  geom_line(alpha = .7) +
   labs(title = "Umidade", x = "Data", y = "%", color = NULL) +
   theme_bw() +
   scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day") +
@@ -117,7 +134,7 @@ res_press_weatherlink <- tbl(con, schema_weatherlink_sensor_772003) |>
   collect() |>
   mutate(
     time = as_datetime(time, tz = "America/Sao_Paulo"),
-    value = value*33.864,
+    value = value * 33.864,
     name = "Cametá"
   )
 
@@ -131,8 +148,11 @@ res_press_plugfield <- tbl(con, schema_plugfield) |>
     name = "Merajuba/Mocajuba"
   )
 
-plot_press <- ggplot(data = bind_rows(res_press_weatherlink, res_press_plugfield), aes(x = time, y = value, color = name)) +
-  geom_line(alpha = .7) + 
+plot_press <- ggplot(
+  data = bind_rows(res_press_weatherlink, res_press_plugfield),
+  aes(x = time, y = value, color = name)
+) +
+  geom_line(alpha = .7) +
   labs(title = "Pressão", x = "Data", y = "hPa", color = NULL) +
   theme_bw() +
   scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day") +
@@ -160,8 +180,11 @@ res_chuva_plugfield <- tbl(con, schema_plugfield) |>
     name = "Merajuba/Mocajuba"
   )
 
-plot_chuva <- ggplot(data = bind_rows(res_chuva_weatherlink, res_chuva_plugfield), aes(x = time, y = value, color = name)) +
-  geom_line(alpha = .7) + 
+plot_chuva <- ggplot(
+  data = bind_rows(res_chuva_weatherlink, res_chuva_plugfield),
+  aes(x = time, y = value, color = name)
+) +
+  geom_line(alpha = .7) +
   labs(title = "Chuva", x = "Data", y = "mm", color = NULL) +
   theme_bw() +
   scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day") +
@@ -190,12 +213,15 @@ res_vento_plugfield <- tbl(con, schema_plugfield) |>
     name = "Merajuba/Mocajuba"
   )
 
-plot_vento <- ggplot(data = bind_rows(res_vento_weatherlink, res_vento_plugfield), aes(x = time, y = value, color = name)) +
-  geom_line(alpha = .7) + 
+plot_vento <- ggplot(
+  data = bind_rows(res_vento_weatherlink, res_vento_plugfield),
+  aes(x = time, y = value, color = name)
+) +
+  geom_line(alpha = .7) +
   labs(title = "Vento", x = "Data", y = "mm", color = NULL) +
   theme_bw() +
   scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day") +
-    theme(legend.position = "bottom", legend.direction = "horizontal")
+  theme(legend.position = "bottom", legend.direction = "horizontal")
 
 plot_vento <- add_ggplot(plot_vento, width = 7, height = 5)
 
@@ -209,7 +235,9 @@ email <- compose_email(
   ),
   body = blocks(
     block_text(md("## Relatório comparativo")),
-    block_text(md("### Últimos sete dias das estações meteorológicas de Cametá e Merajuba/Mocajuba")),
+    block_text(md(
+      "### Últimos sete dias das estações meteorológicas de Cametá e Merajuba/Mocajuba"
+    )),
     block_text(md(glue(
       "
       {plot_temp}

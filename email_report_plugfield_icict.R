@@ -26,7 +26,8 @@ recipients <- c(
   "heglaucio.barros@fiocruz.br",
   "renata.gracie@fiocruz.br",
   "christovam.barcellos@fiocruz.br",
-  "izabio2005@gmail.com"
+  "izabio2005@gmail.com",
+  "wagnerbm2006@gmail.com"
 )
 
 # Plugfield
