@@ -73,8 +73,6 @@ for (d in station_ids) {
     )
     update_database <- NA
 
-    print(last_update_file_name)
-
     if (!file.exists(last_update_file_name)) {
       update_database <- TRUE
     } else {
