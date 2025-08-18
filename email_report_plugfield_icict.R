@@ -32,7 +32,7 @@ recipients <- c(
 # Plugfield
 con <- dbConnect(
   RPostgres::Postgres(),
-  dbname = "observatorio", 
+  dbname = "observatorio",
   host = "psql.icict.fiocruz.br",
   port = 5432,
   user = Sys.getenv("weather_user"),
@@ -41,7 +41,6 @@ con <- dbConnect(
 
 # Lista tabelas
 # dbListObjects(con, Id(schema = 'estacoes'))
-
 
 # Horário referência
 date_time <- format(now(), "%A, %e de %B de %Y, às %R (%Z)")
@@ -66,7 +65,7 @@ min_temp <- res_temp |>
   slice_tail(n = 1)
 
 plot_temp <- ggplot(data = res_temp, aes(x = time, y = value)) +
-  geom_line() + 
+  geom_line() +
   labs(title = "Temperatura", x = "Data", y = "ºC") +
   theme_bw() +
   scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")
@@ -89,7 +88,7 @@ min_umid <- res_umid |>
   slice_tail(n = 1)
 
 plot_umid <- ggplot(data = res_umid, aes(x = time, y = value)) +
-  geom_line() + 
+  geom_line() +
   labs(title = "Umidade", x = "Data", y = "%") +
   theme_bw() +
   scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")
@@ -112,7 +111,7 @@ min_press <- res_press |>
   slice_tail(n = 1)
 
 plot_press <- ggplot(data = res_press, aes(x = time, y = value)) +
-  geom_line() + 
+  geom_line() +
   labs(title = "Pressão", x = "Data", y = "hPa") +
   theme_bw() +
   scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")
@@ -131,18 +130,57 @@ max_uv <- res_uv |>
   slice_tail(n = 1)
 
 plot_uv <- ggplot(data = res_uv, aes(x = time, y = value)) +
-  annotate("rect", xmin=min(res_uv$time, na.rm = TRUE),xmax=max(res_uv$time, na.rm = TRUE),ymin=-Inf,ymax=3,alpha=0.3,fill="green") +
-  annotate("rect", xmin=min(res_uv$time, na.rm = TRUE),xmax=max(res_uv$time, na.rm = TRUE),ymin=3,ymax=6,alpha=0.3,fill="yellow") +
-  annotate("rect", xmin=min(res_uv$time, na.rm = TRUE),xmax=max(res_uv$time, na.rm = TRUE),ymin=6,ymax=8,alpha=0.3,fill="orange") +
-  annotate("rect", xmin=min(res_uv$time, na.rm = TRUE),xmax=max(res_uv$time, na.rm = TRUE),ymin=8,ymax=11,alpha=0.3,fill="red") +
-  annotate("rect", xmin=min(res_uv$time, na.rm = TRUE),xmax=max(res_uv$time, na.rm = TRUE),ymin=11,ymax=Inf,alpha=0.3,fill="purple") +
-  geom_line() + 
+  annotate(
+    "rect",
+    xmin = min(res_uv$time, na.rm = TRUE),
+    xmax = max(res_uv$time, na.rm = TRUE),
+    ymin = -Inf,
+    ymax = 3,
+    alpha = 0.3,
+    fill = "green"
+  ) +
+  annotate(
+    "rect",
+    xmin = min(res_uv$time, na.rm = TRUE),
+    xmax = max(res_uv$time, na.rm = TRUE),
+    ymin = 3,
+    ymax = 6,
+    alpha = 0.3,
+    fill = "yellow"
+  ) +
+  annotate(
+    "rect",
+    xmin = min(res_uv$time, na.rm = TRUE),
+    xmax = max(res_uv$time, na.rm = TRUE),
+    ymin = 6,
+    ymax = 8,
+    alpha = 0.3,
+    fill = "orange"
+  ) +
+  annotate(
+    "rect",
+    xmin = min(res_uv$time, na.rm = TRUE),
+    xmax = max(res_uv$time, na.rm = TRUE),
+    ymin = 8,
+    ymax = 11,
+    alpha = 0.3,
+    fill = "red"
+  ) +
+  annotate(
+    "rect",
+    xmin = min(res_uv$time, na.rm = TRUE),
+    xmax = max(res_uv$time, na.rm = TRUE),
+    ymin = 11,
+    ymax = Inf,
+    alpha = 0.3,
+    fill = "purple"
+  ) +
+  geom_line() +
   labs(title = "UV", x = "Data", y = "uv") +
   theme_bw() +
   scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")
 
 plot_uv <- add_ggplot(plot_uv, width = 7, height = 5)
-
 
 
 ## Nível do rio
@@ -160,8 +198,8 @@ res_nrio_moon <- res_nrio |>
     date = date + hours(3),
     phase = lunar.phase(x = date, name = 8),
     rad = lunar.phase(x = date),
-    percent = ifelse(rad >= pi, (pi - (rad - pi))/(pi), rad/(pi)),
-    yplot = max(res_nrio$value)+.1
+    percent = ifelse(rad >= pi, (pi - (rad - pi)) / (pi), rad / (pi)),
+    yplot = max(res_nrio$value) + .1
   )
 
 max_nrio <- res_nrio |>
@@ -173,9 +211,21 @@ min_nrio <- res_nrio |>
   slice_tail(n = 1)
 
 plot_nrio <- ggplot() +
-  geom_line(data = res_nrio, aes(x = time, y = value)) + 
-  geom_moon(data = res_nrio_moon, ratio = 1, size = 7, fill = "yellow", aes(x = date, y = yplot)) + 
-  geom_moon(data = res_nrio_moon, size = 7, fill = "black", aes(x = date, y = yplot, ratio = 1-percent), right = res_nrio_moon$phase == "first quarter") + 
+  geom_line(data = res_nrio, aes(x = time, y = value)) +
+  geom_moon(
+    data = res_nrio_moon,
+    ratio = 1,
+    size = 7,
+    fill = "yellow",
+    aes(x = date, y = yplot)
+  ) +
+  geom_moon(
+    data = res_nrio_moon,
+    size = 7,
+    fill = "black",
+    aes(x = date, y = yplot, ratio = 1 - percent),
+    right = res_nrio_moon$phase == "first quarter"
+  ) +
   labs(title = "Nível do rio", x = "Data", y = "mca") +
   theme_bw() +
   scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")
@@ -194,10 +244,10 @@ max_chuva <- res_chuva |>
   slice_tail(n = 1)
 
 plot_chuva <- ggplot(data = res_chuva, aes(x = time, y = value)) +
-  geom_line() + 
+  geom_line() +
   labs(title = "Chuva", x = "Data", y = "mm") +
   theme_bw() +
-  scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")  
+  scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")
 
 plot_chuva <- add_ggplot(plot_chuva, width = 7, height = 5)
 
@@ -228,12 +278,15 @@ max_rajada <- res_rajada |>
   filter(value == max(value, na.rm = TRUE)) |>
   slice_tail(n = 1)
 
-plot_vento <- ggplot(data = bind_rows(res_vento, res_rajada), aes(x = time, y = value, color = name)) +
-  geom_line() + 
+plot_vento <- ggplot(
+  data = bind_rows(res_vento, res_rajada),
+  aes(x = time, y = value, color = name)
+) +
+  geom_line() +
   labs(title = "Vento e rajada", x = "Data", y = "km/h", color = NULL) +
   theme_bw() +
   theme(legend.position = "bottom", legend.direction = "horizontal") +
-  scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")  
+  scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")
 
 plot_vento <- add_ggplot(plot_vento, width = 7, height = 5)
 
@@ -245,7 +298,7 @@ res_wifi <- tbl(con, schema) |>
   mutate(time = as_datetime(time, tz = "America/Sao_Paulo"))
 
 plot_wifi <- ggplot(data = res_wifi, aes(x = time, y = value)) +
-  geom_line() + 
+  geom_line() +
   labs(title = "Sinal Wi-Fi da estação", x = "Data", y = "%") +
   geom_smooth() +
   theme_bw() +
@@ -261,7 +314,7 @@ res_bat <- tbl(con, schema) |>
   mutate(time = as_datetime(time, tz = "America/Sao_Paulo"))
 
 plot_bat <- ggplot(data = res_bat, aes(x = time, y = value)) +
-  geom_line() + 
+  geom_line() +
   labs(title = "Bateria da estação", x = "Data", y = "%") +
   theme_bw() +
   scale_x_datetime(date_labels = "%b %d", date_breaks = "1 day")
@@ -277,22 +330,37 @@ res_tucurui <- reservatorio_sin(19134, data_inicial = time_local) |>
   complete(date = c(unique(date), today()))
 
 plot_tucurui_cota <- ggplot(data = res_tucurui, aes(x = date, y = cota_m)) +
-  geom_line() + 
-  labs(title = "Cota Usina Tucuruí", x = "Data", y = "m",
-    subtitle = "Dados do SAR/SIN/ANA") +
+  geom_line() +
+  labs(
+    title = "Cota Usina Tucuruí",
+    x = "Data",
+    y = "m",
+    subtitle = "Dados do SAR/SIN/ANA"
+  ) +
   theme_bw() +
   scale_x_date(date_labels = "%b %d", date_breaks = "1 day")
 
 plot_tucurui_cota <- add_ggplot(plot_tucurui_cota, width = 7, height = 5)
 
-plot_tucurui_afluencia <- ggplot(data = res_tucurui, aes(x = date, y = afluencia_m3_s)) +
-  geom_line() + 
-  labs(title = "Afluência Usina Tucuruí", x = "Data", y = "m3/s",
-    subtitle = "Dados do SAR/SIN/ANA") +
+plot_tucurui_afluencia <- ggplot(
+  data = res_tucurui,
+  aes(x = date, y = afluencia_m3_s)
+) +
+  geom_line() +
+  labs(
+    title = "Afluência Usina Tucuruí",
+    x = "Data",
+    y = "m3/s",
+    subtitle = "Dados do SAR/SIN/ANA"
+  ) +
   theme_bw() +
   scale_x_date(date_labels = "%b %d", date_breaks = "1 day")
 
-plot_tucurui_afluencia <- add_ggplot(plot_tucurui_afluencia, width = 7, height = 5)
+plot_tucurui_afluencia <- add_ggplot(
+  plot_tucurui_afluencia,
+  width = 7,
+  height = 5
+)
 
 # E-mail
 email <- compose_email(
@@ -300,7 +368,9 @@ email <- compose_email(
     block_text(md(glue("{img_string}")))
   ),
   body = blocks(
-    block_text(md("## Relatório da estação meteorológica Merajuba - Mojacuba (Plugfield 1327)")),
+    block_text(md(
+      "## Relatório da estação meteorológica Merajuba - Mojacuba (Plugfield 1327)"
+    )),
     block_text(md("### Últimos sete dias")),
     block_text(md(glue(
       "
