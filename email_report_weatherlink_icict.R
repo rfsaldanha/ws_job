@@ -37,7 +37,16 @@ recipients <- c(
   "renata.gracie@fiocruz.br",
   "christovam.barcellos@fiocruz.br",
   "izabio2005@gmail.com",
-  "wagnerbm2006@gmail.com"
+  "wagnerbm2006@gmail.com",
+  "wagnerbm2006@gmail.com",
+  "ambientalmocajuba@gmail.com",
+  "departamentodeendemias@gmail.com",
+  "sedurbmocajuba2025@gmail.com",
+  "semagrimocajuba15@gmail.com",
+  "gabineteprefmocajuba10@gmail.com",
+  "ricardo23ufpa@hotmail.com",
+  "smssaudemocajuba@gmail.com",
+  "franciana-valente@hotmail.com"
 )
 
 # Weatherlink
