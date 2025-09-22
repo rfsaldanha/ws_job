@@ -38,7 +38,6 @@ recipients <- c(
   "christovam.barcellos@fiocruz.br",
   "izabio2005@gmail.com",
   "wagnerbm2006@gmail.com",
-  "wagnerbm2006@gmail.com",
   "ambientalmocajuba@gmail.com",
   "departamentodeendemias@gmail.com",
   "sedurbmocajuba2025@gmail.com",
