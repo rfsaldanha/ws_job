@@ -8,8 +8,11 @@ library(cli)
 library(rlang)
 library(blastula)
 library(glue)
+library(ntfy)
 source("ws_job/emails.R")
 schema <- "estacoes"
+
+ntfy_topic <- "ocs_update_davis_cameta"
 
 # sudo apt install tzdata-legacy
 
@@ -109,9 +112,18 @@ for (d in station_ids) {
             "Could not write data from station {d}, sensor {res[[s]]$lsid} to database."
           )
           message(e)
-          send_email_write_db_error(
-            e,
-            glue("Estação {d}, sensor {res[[s]]$lsid} da WeatherLink")
+          # send_email_write_db_error(
+          #   e,
+          #   glue("Estação {d}, sensor {res[[s]]$lsid} da WeatherLink")
+          # )
+          ntfy_send(
+            message = glue("Could not connect to local database."),
+            tags = tags$rotating_light,
+            topic = ntfy_topic
+          )
+          ntfy_send(
+            message = e,
+            topic = ntfy_topic
           )
           cli_abort("This update was aborted.")
         }
@@ -133,6 +145,12 @@ dbDisconnect(con)
 
 # Save last end time
 saveRDS(object = now_ts, file = "weatherlink_last_update_time.rds")
+
+ntfy_send(
+  message = glue("Weather station data updated successfully."),
+  tags = tags$white_check_mark,
+  topic = ntfy_topic
+)
 
 # Final messages
 cli_alert_info("End of update.")

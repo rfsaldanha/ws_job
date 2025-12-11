@@ -8,8 +8,11 @@ library(cli)
 library(rlang)
 library(blastula)
 library(glue)
+library(ntfy)
 source("ws_job/emails.R")
 schema <- "estacoes"
+
+ntfy_topic <- "ocs_update_plugfield_mocajuba"
 
 # Message and keep job start timestamp
 cli_alert_info("Job start: {now()}")
@@ -27,20 +30,31 @@ end_time <- format(now(tzone = "UTC"), "%d/%m/%Y %H:%M:%S")
 # Database connection
 con <- tryCatch(
   {
-    # dbConnect(duckdb(), "weatherlink.duckdb")
     dbConnect(
       RPostgres::Postgres(),
-      dbname = "observatorio", 
+      dbname = "observatorio",
       host = "psql.icict.fiocruz.br",
       port = 5432,
       user = Sys.getenv("weather_user"),
       password = Sys.getenv("weather_password")
     )
-  }, 
-  error=function(e) {
+  },
+  error = function(e) {
     cli_alert_warning("Could not connect to database.")
     message(e)
-    send_email_database_error(e, "Conexão com o banco de dados local da Plugfield")
+    # send_email_database_error(
+    #   e,
+    #   "Conexão com o banco de dados local da Plugfield"
+    # )
+    ntfy_send(
+      message = glue("Could not connect to local database."),
+      tags = tags$rotating_light,
+      topic = ntfy_topic
+    )
+    ntfy_send(
+      message = e,
+      topic = ntfy_topic
+    )
     cli_abort("This update was aborted.")
   }
 )
@@ -49,7 +63,7 @@ con <- tryCatch(
 device_ids <- c(4893)
 sensor_ids <- c(8, 35, 36, 37, 11, 18, 19, 22, 27, 28, 34, 23, 25, 26, 1)
 
-# Plugfield login 
+# Plugfield login
 cli_alert("Attempting to login...")
 login()
 
@@ -58,27 +72,30 @@ res <- tibble()
 
 # For each device...
 cli_alert("Starting to retrieve data...")
-for(d in device_ids){
-
+for (d in device_ids) {
   ## Check if device is updated
   last_device_update <- device_last_update(d)
   current_time <- as_datetime(end_time, format = "%d/%m/%Y %H:%M:%S")
   diff_time <- difftime(current_time, last_device_update, units = "mins")
-  
-  if(diff_time >= 15){
-    cli_alert_danger("Last update from station {d} was at {last_device_update}.")
+
+  if (diff_time >= 15) {
+    cli_alert_danger(
+      "Last update from station {d} was at {last_device_update}."
+    )
     send_email_device_offline(paste("Plugfield", d), last_device_update)
     cli_abort("This update was aborted.")
   }
 
   # For each sensor...
-  for(s in sensor_ids){
+  for (s in sensor_ids) {
     cli_alert("Retrieving data from station {d}, sensor {s}...")
     tmp <- tryCatch(
       {
         data_sensor(
-          deviceId = d, sensor = s, 
-          time = start_time, timeMax = end_time
+          deviceId = d,
+          sensor = s,
+          time = start_time,
+          timeMax = end_time
         ) |>
           # Format data for database
           rename(value = value_formatted) |>
@@ -88,16 +105,23 @@ for(d in device_ids){
           ) |>
           relocate(device, sensor) |>
           relocate(time, .before = value)
-      }, 
-      error=function(e) {
-        cli_alert_warning("Could not retrieve data from station {d}, sensor {s}.")
+      },
+      error = function(e) {
+        cli_alert_warning(
+          "Could not retrieve data from station {d}, sensor {s}."
+        )
         message(e)
-        send_email_data_retrieve_error(e, glue("Estação {d}, sensor {s} da Plugfield"))
+        send_email_data_retrieve_error(
+          e,
+          glue("Estação {d}, sensor {s} da Plugfield")
+        )
         cli_abort("This update was aborted.")
       }
     )
-    cli_alert_success("Data from station {d}, sensor {s} retrieved successfully.")
-    
+    cli_alert_success(
+      "Data from station {d}, sensor {s} retrieved successfully."
+    )
+
     res <- bind_rows(res, tmp)
     rm(tmp)
   }
@@ -105,24 +129,23 @@ for(d in device_ids){
   # Write to database
   cli_alert("Writing new data from station {d} to database...")
   table_name <- paste0("tb_estacao_1b")
-  
+
   db_write <- tryCatch(
     {
       dbWriteTable(
-        conn = con, 
-        name = Id(schema, table_name), 
-        value = res, 
+        conn = con,
+        name = Id(schema, table_name),
+        value = res,
         append = TRUE
       )
-    }, 
-    error=function(e) {
+    },
+    error = function(e) {
       cli_alert_warning("Could not write data from station {d}.")
       message(e)
       send_email_write_db_error(e, glue("Estação {d} da Plugfield"))
       cli_abort("This update was aborted.")
     }
   )
-
 }
 
 # Disconnect from database
@@ -130,6 +153,12 @@ dbDisconnect(con)
 
 # Save last end time
 saveRDS(object = end_time, file = "plugfield_last_end_time.rds")
+
+ntfy_send(
+  message = glue("Weather station data updated successfully."),
+  tags = tags$white_check_mark,
+  topic = ntfy_topic
+)
 
 # Final messages
 cli_alert_info("End of update.")
