@@ -78,7 +78,12 @@ for (d in device_ids) {
     cli_alert_danger(
       "Last update from station {d} was at {last_device_update}."
     )
-    send_email_device_offline(paste("Plugfield", d), last_device_update)
+    # send_email_device_offline(paste("Plugfield", d), last_device_update)
+    ntfy_send(
+      message = glue("Device offline."),
+      tags = tags$rotating_light,
+      topic = ntfy_topic
+    )
     cli_abort("This update was aborted.")
   }
 
@@ -107,9 +112,16 @@ for (d in device_ids) {
           "Could not retrieve data from station {d}, sensor {s}."
         )
         message(e)
-        send_email_data_retrieve_error(
-          e,
-          glue("Estação {d}, sensor {s} da Plugfield")
+        # send_email_data_retrieve_error(
+        #   e,
+        #   glue("Estação {d}, sensor {s} da Plugfield")
+        # )
+        ntfy_send(
+          message = glue(
+            "Could not retrieve data from station {d}, sensor {s}."
+          ),
+          tags = tags$rotating_light,
+          topic = ntfy_topic
         )
         cli_abort("This update was aborted.")
       }
@@ -138,7 +150,14 @@ for (d in device_ids) {
     error = function(e) {
       cli_alert_warning("Could not write data from station {d}.")
       message(e)
-      send_email_write_db_error(e, glue("Estação {d} da Plugfield"))
+      # send_email_write_db_error(e, glue("Estação {d} da Plugfield"))
+      ntfy_send(
+        message = glue(
+          "Could not write data from station {d}."
+        ),
+        tags = tags$rotating_light,
+        topic = ntfy_topic
+      )
       cli_abort("This update was aborted.")
     }
   )
