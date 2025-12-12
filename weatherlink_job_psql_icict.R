@@ -37,10 +37,10 @@ con <- tryCatch(
   error = function(e) {
     cli_alert_warning("Could not connect to database.")
     message(e)
-    send_email_database_error(
-      e,
-      "Conexão com o banco de dados local da WeatherLink"
-    )
+    # send_email_database_error(
+    #   e,
+    #   "Conexão com o banco de dados local da WeatherLink"
+    # )
     ntfy_send(
       message = glue("Could not connect to local database. {e}"),
       tags = tags$rotating_light,
@@ -64,7 +64,7 @@ for (d in station_ids) {
     error = function(e) {
       cli_alert_warning("Could not retrieve data from station {d}.")
       message(e)
-      send_email_data_retrieve_error(e, glue("Estação {d} da WeatherLink"))
+      # send_email_data_retrieve_error(e, glue("Estação {d} da WeatherLink"))
       cli_abort("This update was aborted.")
     }
   )
