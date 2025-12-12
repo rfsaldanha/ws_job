@@ -28,7 +28,8 @@ con <- tryCatch(
       RPostgres::Postgres(),
       dbname = "observatorio",
       host = "psql.icict.fiocruz.br",
-      port = 5432,
+      # port = 5432,
+      port = 8080,
       user = Sys.getenv("weather_user"),
       password = Sys.getenv("weather_password")
     )
@@ -39,6 +40,11 @@ con <- tryCatch(
     send_email_database_error(
       e,
       "Conexão com o banco de dados local da WeatherLink"
+    )
+    ntfy_send(
+      message = glue("Could not connect to local database. {e}"),
+      tags = tags$rotating_light,
+      topic = ntfy_topic
     )
     cli_abort("This update was aborted.")
   }
@@ -117,7 +123,7 @@ for (d in station_ids) {
           #   glue("Estação {d}, sensor {res[[s]]$lsid} da WeatherLink")
           # )
           ntfy_send(
-            message = glue("Could not connect to local database. {e}"),
+            message = glue("Could not write to local database. {e}"),
             tags = tags$rotating_light,
             topic = ntfy_topic
           )
