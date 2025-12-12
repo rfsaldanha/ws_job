@@ -47,12 +47,8 @@ con <- tryCatch(
     #   "Conexão com o banco de dados local da Plugfield"
     # )
     ntfy_send(
-      message = glue("Could not connect to local database."),
+      message = glue("Could not connect to local database. {e}"),
       tags = tags$rotating_light,
-      topic = ntfy_topic
-    )
-    ntfy_send(
-      message = e,
       topic = ntfy_topic
     )
     cli_abort("This update was aborted.")
@@ -153,12 +149,6 @@ dbDisconnect(con)
 
 # Save last end time
 saveRDS(object = end_time, file = "plugfield_last_end_time.rds")
-
-ntfy_send(
-  message = glue("Weather station data updated successfully."),
-  tags = tags$white_check_mark,
-  topic = ntfy_topic
-)
 
 # Final messages
 cli_alert_info("End of update.")
