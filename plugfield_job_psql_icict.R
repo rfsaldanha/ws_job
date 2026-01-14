@@ -51,7 +51,6 @@ con <- tryCatch(
 
 # Sensor ids
 device_ids <- c(4893, 10611)
-sensor_ids <- c(8, 35, 36, 37, 11, 18, 19, 22, 27, 28, 34, 23, 25, 26, 1)
 
 # Plugfield login
 cli_alert("Attempting to login...")
@@ -82,6 +81,27 @@ for (d in device_ids) {
 
   # For each sensor...
   for (s in sensor_ids) {
+    if (d == 4863) {
+      sensor_ids <- c(8, 35, 36, 37, 11, 18, 19, 22, 27, 28, 34, 23, 25, 26, 1)
+    } else if (d == 10611) {
+      sensor_ids <- c(
+        8,
+        35,
+        348,
+        48,
+        347,
+        11,
+        18,
+        19,
+        22,
+        27,
+        28,
+        49,
+        23,
+        25,
+        1
+      )
+    }
     cli_alert("Retrieving data from station {d}, sensor {s}...")
     tmp <- tryCatch(
       {
