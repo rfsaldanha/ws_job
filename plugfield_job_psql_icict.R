@@ -6,10 +6,8 @@ library(lubridate)
 library(dplyr)
 library(cli)
 library(rlang)
-library(blastula)
 library(glue)
 library(ntfy)
-source("ws_job/emails.R")
 schema <- "estacoes"
 
 ntfy_topic <- "ocs_update_plugfield_mocajuba"
@@ -20,7 +18,7 @@ cli_alert_info("Job start: {now()}")
 # Time stamp
 
 ## Initial time stamp, keep it commented!
-# last_end_time <- "17/09/2024 00:00:00"
+# last_end_time <- "13/01/2026 00:00:00"
 # saveRDS(object = last_end_time, file = "plugfield_last_end_time.rds")
 
 ## Load end time from previous run as start time of this run
@@ -42,10 +40,6 @@ con <- tryCatch(
   error = function(e) {
     cli_alert_warning("Could not connect to database.")
     message(e)
-    # send_email_database_error(
-    #   e,
-    #   "Conexão com o banco de dados local da Plugfield"
-    # )
     ntfy_send(
       message = glue("Could not connect to local database. {e}"),
       tags = tags$rotating_light,
@@ -78,7 +72,6 @@ for (d in device_ids) {
     cli_alert_danger(
       "Last update from station {d} was at {last_device_update}."
     )
-    # send_email_device_offline(paste("Plugfield", d), last_device_update)
     ntfy_send(
       message = glue("Device offline."),
       tags = tags$rotating_light,
@@ -112,10 +105,6 @@ for (d in device_ids) {
           "Could not retrieve data from station {d}, sensor {s}."
         )
         message(e)
-        # send_email_data_retrieve_error(
-        #   e,
-        #   glue("Estação {d}, sensor {s} da Plugfield")
-        # )
         ntfy_send(
           message = glue(
             "Could not retrieve data from station {d}, sensor {s}."
@@ -150,7 +139,6 @@ for (d in device_ids) {
     error = function(e) {
       cli_alert_warning("Could not write data from station {d}.")
       message(e)
-      # send_email_write_db_error(e, glue("Estação {d} da Plugfield"))
       ntfy_send(
         message = glue(
           "Could not write data from station {d}."
