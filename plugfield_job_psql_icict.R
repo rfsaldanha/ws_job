@@ -50,15 +50,12 @@ con <- tryCatch(
 )
 
 # Sensor ids
-device_ids <- c(4893)
+device_ids <- c(4893, 10611)
 sensor_ids <- c(8, 35, 36, 37, 11, 18, 19, 22, 27, 28, 34, 23, 25, 26, 1)
 
 # Plugfield login
 cli_alert("Attempting to login...")
 login()
-
-# Empty data tibble
-res <- tibble()
 
 # For each device...
 cli_alert("Starting to retrieve data...")
@@ -79,6 +76,9 @@ for (d in device_ids) {
     )
     cli_abort("This update was aborted.")
   }
+
+  # Empty data tibble
+  res <- tibble()
 
   # For each sensor...
   for (s in sensor_ids) {
@@ -125,7 +125,11 @@ for (d in device_ids) {
 
   # Write to database
   cli_alert("Writing new data from station {d} to database...")
-  table_name <- paste0("tb_estacao_1b")
+  if (d == 4893) {
+    table_name <- paste0("tb_estacao_1b")
+  } else if (d == 10611) {
+    table_name <- paste0("tb_estacao_3")
+  }
 
   db_write <- tryCatch(
     {
