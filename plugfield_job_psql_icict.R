@@ -80,7 +80,7 @@ for (d in device_ids) {
   res <- tibble()
 
   # For each sensor...
-  if (d == 4863) {
+  if (d == 4893) {
     sensor_ids <- c(8, 35, 36, 37, 11, 18, 19, 22, 27, 28, 34, 23, 25, 26, 1)
   } else if (d == 10611) {
     sensor_ids <- c(
