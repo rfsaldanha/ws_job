@@ -159,9 +159,11 @@ for (d in device_ids) {
         dbWriteTable(
           conn = con,
           name = Id(schema, table_name),
-          value = res,
+          value = tmp,
           append = TRUE
         )
+
+        rm(tmp)
       },
       error = function(e) {
         cli_alert_warning("Could not write data from station {d}.")
