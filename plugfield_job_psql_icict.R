@@ -153,6 +153,8 @@ for (d in device_ids) {
     table_name <- paste0("tb_estacao_1b")
   } else if (d == 10611) {
     table_name <- paste0("tb_estacao_3")
+  } else if (d == 10603) {
+    table_name <- paste0("tb_estacao_4")
   }
 
   db_write <- tryCatch(
