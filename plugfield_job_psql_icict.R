@@ -50,7 +50,10 @@ con <- tryCatch(
 )
 
 # Sensor ids
-device_ids <- c(4893, 10611)
+# 4893 Cametá
+# 10611 Maré meteo
+# 10603 Maré ar
+device_ids <- c(4893, 10611, 10603)
 
 # Plugfield login
 cli_alert("Attempting to login...")
@@ -98,6 +101,8 @@ for (d in device_ids) {
       25,
       1
     )
+  } else if (d = 10603) {
+    sensor_ids <- c(23, 73, 74, 72, 71, 75, 70)
   }
 
   for (s in sensor_ids) {
