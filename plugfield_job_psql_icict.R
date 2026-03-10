@@ -101,7 +101,7 @@ for (d in device_ids) {
       25,
       1
     )
-  } else if (d = 10603) {
+  } else if (d == 10603) {
     sensor_ids <- c(23, 73, 74, 72, 71, 75, 70)
   }
 
