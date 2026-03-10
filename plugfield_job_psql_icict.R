@@ -79,10 +79,7 @@ for (d in device_ids) {
     cli_abort("This update was aborted.")
   }
 
-  # Empty data tibble
-  res <- tibble()
-
-  # For each sensor...
+  # Stations and sensors
   if (d == 4893) {
     sensor_ids <- c(8, 35, 36, 37, 11, 18, 19, 22, 27, 28, 34, 23, 25, 26, 1)
   } else if (d == 10611) {
@@ -105,6 +102,7 @@ for (d in device_ids) {
     sensor_ids <- c(23, 73, 74, 72, 71, 75, 70)
   }
 
+  # For each sensor...
   for (s in sensor_ids) {
     cli_alert("Retrieving data from station {d}, sensor {s}...")
     tmp <- tryCatch(
@@ -143,42 +141,42 @@ for (d in device_ids) {
       "Data from station {d}, sensor {s} retrieved successfully."
     )
 
-    res <- bind_rows(res, tmp)
-    rm(tmp)
-  }
-
-  # Write to database
-  cli_alert("Writing new data from station {d} to database...")
-  if (d == 4893) {
-    table_name <- paste0("tb_estacao_1b")
-  } else if (d == 10611) {
-    table_name <- paste0("tb_estacao_3")
-  } else if (d == 10603) {
-    table_name <- paste0("tb_estacao_4")
-  }
-
-  db_write <- tryCatch(
-    {
-      dbWriteTable(
-        conn = con,
-        name = Id(schema, table_name),
-        value = res,
-        append = TRUE
-      )
-    },
-    error = function(e) {
-      cli_alert_warning("Could not write data from station {d}.")
-      message(e)
-      ntfy_send(
-        message = glue(
-          "Could not write data from station {d}."
-        ),
-        tags = tags$rotating_light,
-        topic = ntfy_topic
-      )
-      cli_abort("This update was aborted.")
+    # Tables
+    if (d == 4893) {
+      table_name <- paste0("tb_estacao_1b")
+    } else if (d == 10611) {
+      table_name <- paste0("tb_estacao_3")
+    } else if (d == 10603) {
+      table_name <- paste0("tb_estacao_4")
     }
-  )
+
+    # Write to database
+    cli_alert(
+      "Writing new data from station {d} sensor {s} to table {table_name}..."
+    )
+    db_write <- tryCatch(
+      {
+        dbWriteTable(
+          conn = con,
+          name = Id(schema, table_name),
+          value = res,
+          append = TRUE
+        )
+      },
+      error = function(e) {
+        cli_alert_warning("Could not write data from station {d}.")
+        message(e)
+        ntfy_send(
+          message = glue(
+            "Could not write data from station {d}."
+          ),
+          tags = tags$rotating_light,
+          topic = ntfy_topic
+        )
+        cli_abort("This update was aborted.")
+      }
+    )
+  }
 }
 
 # Disconnect from database
