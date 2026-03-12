@@ -71,12 +71,18 @@ for (d in device_ids) {
     cli_alert_danger(
       "Last update from station {d} was at {last_device_update}."
     )
+    cli_alert_warning(
+      "The update for device {d} was aborted. Going for next device..."
+    )
     ntfy_send(
-      message = glue("Device offline."),
+      message = glue(
+        "Device offline. Last update from station {d} was at {last_device_update}. The update for device {d} was aborted. Going for next device..."
+      ),
       tags = tags$rotating_light,
       topic = ntfy_topic
     )
-    cli_abort("This update was aborted.")
+    # Skip loop
+    next
   }
 
   # Stations and sensors
@@ -124,17 +130,18 @@ for (d in device_ids) {
       },
       error = function(e) {
         cli_alert_warning(
-          "Could not retrieve data from station {d}, sensor {s}."
+          "Could not retrieve data from station {d}, sensor {s}. Going for next sensor..."
         )
         message(e)
         ntfy_send(
           message = glue(
-            "Could not retrieve data from station {d}, sensor {s}."
+            "Could not retrieve data from station {d}, sensor {s}. Going for next sensor..."
           ),
           tags = tags$rotating_light,
           topic = ntfy_topic
         )
-        cli_abort("This update was aborted.")
+        # Skip loop
+        next
       }
     )
     cli_alert_success(
@@ -166,16 +173,21 @@ for (d in device_ids) {
         rm(tmp)
       },
       error = function(e) {
-        cli_alert_warning("Could not write data from station {d}.")
+        cli_alert_warning("Could not write data from station {d} sensor {s}.")
         message(e)
         ntfy_send(
           message = glue(
-            "Could not write data from station {d}."
+            "Could not write data from station {d} sensor {s}."
           ),
           tags = tags$rotating_light,
           topic = ntfy_topic
         )
-        cli_abort("This update was aborted.")
+        cli_alert_warning(
+          "Could not write data from station {d} sensor {s}. Going for next sensor..."
+        )
+
+        # Skip loop
+        next
       }
     )
   }
